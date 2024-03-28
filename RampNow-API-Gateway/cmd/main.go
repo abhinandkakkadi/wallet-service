@@ -24,17 +24,12 @@ import (
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
 
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
-
-// @securityDefinitions.apikey BearerAuth
-// @in header
-// @name authorization
-
-// @host localhost:3005
-// @BasePath /
-// @query.collection.format multi
+// @SecurityDefinition.Bearer BearerAuth
+// @TokenUrl /auth/token
+// @securityDefinitions.Bearer		type apiKey
+// @securityDefinitions.Bearer		name Authorization
+// @securityDefinitions.Bearer		in header
+// @securityDefinitions.BasicAuth	type basic
 func main() {
 	c, err := config.LoadConfig()
 

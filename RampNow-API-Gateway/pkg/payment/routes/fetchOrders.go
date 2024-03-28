@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/abhinandkakkadi/rampnow/pkg/payment/pb"
+	"github.com/abhinandkakkadi/rampnow/pkg/utils/response"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,11 +18,11 @@ import (
 // @Produce json
 // @Security BearerAuth
 // @param id path string true "Find wallet by user id"
-// @Success 200 {object} pb.GetWalletBalanceResponse{}
-// @Failure 422 {object} pb.GetWalletBalanceResponse{}
-// @Failure 502 {object} pb.GetWalletBalanceResponse{}
+// @Success 200 {object} response.Response{}
+// @Failure 422 {object} response.Response{}
+// @Failure 502 {object} response.Response{}
 // @Router /wallet_balance/{id} [get]
-func GetWalletBalance(ctx *gin.Context, c pb.OrderServiceClient) {
+func GetWalletBalance(ctx *gin.Context, c pb.PaymentServiceClient) {
 
 	paramsID := ctx.Param("id")
 	id, err := strconv.Atoi(paramsID)
@@ -29,6 +30,7 @@ func GetWalletBalance(ctx *gin.Context, c pb.OrderServiceClient) {
 		ctx.AbortWithStatusJSON(http.StatusUnprocessableEntity, pb.GetWalletBalanceResponse{Error: fmt.Sprint(errors.New("id not found"))})
 		return
 	}
+
 	res, err := c.GetWalletBalance(context.Background(), &pb.GetWalletBalanceRequest{
 		Id: int64(id),
 	})
@@ -38,6 +40,9 @@ func GetWalletBalance(ctx *gin.Context, c pb.OrderServiceClient) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, &res)
+	resp := response.SuccessResponse(true, "SUCCESS", res)
+	ctx.Writer.Header().Set("Content-Type", "application/json")
+	ctx.Writer.WriteHeader(http.StatusOK)
+	response.ResponseJSON(*ctx, resp)
 
 }

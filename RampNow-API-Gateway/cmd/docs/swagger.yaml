@@ -1,54 +1,22 @@
-basePath: /
 definitions:
-  domain.Item:
+  domain.Transaction:
     properties:
-      description:
+      payee_ramp_id:
         type: string
-      id:
+      payer_ramp_id:
         type: string
-      price:
+      payment_amount:
         type: number
-      quantity:
-        type: integer
-    type: object
-  domain.Order:
-    properties:
-      currency_unit:
-        type: string
-      items:
-        items:
-          $ref: '#/definitions/domain.Item'
-        type: array
-      status:
-        type: string
-      total:
-        type: number
-    type: object
-  domain.UpdateOrder:
-    properties:
-      id:
-        type: string
-      status:
-        type: string
-    type: object
-  pb.DeleteUserResponse:
-    properties:
-      error:
-        type: string
-      id:
-        type: integer
-      status:
-        type: integer
     type: object
   pb.FindUser:
     properties:
       email:
         type: string
-      first_name:
+      full_name:
         type: string
       id:
         type: integer
-      last_name:
+      ramp_id:
         type: string
       user_name:
         type: string
@@ -106,13 +74,11 @@ definitions:
     properties:
       email:
         type: string
-      first_name:
+      full_name:
         type: string
       id:
         type: integer
-      last_name:
-        type: string
-      user_name:
+      ramp_id:
         type: string
     type: object
   response.Response:
@@ -135,27 +101,24 @@ definitions:
     properties:
       email:
         type: string
-      first_name:
-        type: string
-      last_name:
+      full_name:
         type: string
       password:
         type: string
-      user_name:
+      ramp_id:
         type: string
     type: object
-host: localhost:3005
 info:
   contact:
-    email: sethukumarj.76@gmail.com
+    email: abhinandkr06@gmil.com
     name: API Support
-    url: sethukumarj.com
-  description: This is order management sample service. You can visit the GitHub repository
-    at https://github.com/SethukumarJ/sellerapp-Gateway
+    url: abhinandkakkadi.com
+  description: This is RampNow API gateway for a wallet system. You can visit the
+    GitHub repository at https://github.com/abhinandkakkadi/wallet-service
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-  title: Order Management API
+  title: RampNow API
   version: "1.0"
 paths:
   /auth/login:
@@ -233,65 +196,16 @@ paths:
       summary: Refresh token for users
       tags:
       - Authentication-Service
-  /order:
-    get:
-      operationId: Fetchorder
-      parameters:
-      - description: 'Status : '
-        in: query
-        name: status
-        type: string
-      - description: 'Min Total : '
-        in: query
-        name: mintotal
-        type: string
-      - description: 'Max Total : '
-        in: query
-        name: maxtolat
-        type: string
-      - description: 'Sort By : '
-        in: query
-        name: sortby
-        type: string
-      - description: 'Sort Order : '
-        in: query
-        name: sortorder
-        type: string
-      - description: 'Page : '
-        in: query
-        name: page
-        required: true
-        type: string
-      - description: 'Pagesize : '
-        in: query
-        name: pagesize
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/response.Response'
-      security:
-      - BearerAuth: []
-      summary: Fetch Order
-      tags:
-      - Order-service
+  /payment:
     post:
-      operationId: createorder
+      operationId: createtransaction
       parameters:
-      - description: Order Detials
+      - description: Transaction Detials
         in: body
-        name: orderdetials
+        name: transactiondetials
         required: true
         schema:
-          $ref: '#/definitions/domain.Order'
+          $ref: '#/definitions/domain.Transaction'
       produces:
       - application/json
       responses:
@@ -305,18 +219,12 @@ paths:
             $ref: '#/definitions/response.Response'
       security:
       - BearerAuth: []
-      summary: Create Order
+      summary: Create Transaction
       tags:
-      - Order-service
-    put:
-      operationId: Updateorder
-      parameters:
-      - description: Update Order Detials
-        in: body
-        name: updateorderdetials
-        required: true
-        schema:
-          $ref: '#/definitions/domain.UpdateOrder'
+      - Payment-service
+  /transactions:
+    get:
+      operationId: Get Transactions
       produces:
       - application/json
       responses:
@@ -328,38 +236,15 @@ paths:
           description: Unprocessable Entity
           schema:
             $ref: '#/definitions/response.Response'
-      security:
-      - BearerAuth: []
-      summary: Update Order
-      tags:
-      - Order-service
-  /user/delete/{id}:
-    delete:
-      operationId: Delete user
-      parameters:
-      - description: Id of the user to be deleted
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/pb.DeleteUserResponse'
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/pb.DeleteUserResponse'
         "502":
           description: Bad Gateway
           schema:
-            $ref: '#/definitions/pb.DeleteUserResponse'
-      summary: Delete user
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Transactions
       tags:
-      - User-Section
+      - Payment-service
   /user/finduser/{id}:
     get:
       operationId: Find user by id
@@ -408,13 +293,33 @@ paths:
       summary: Get users
       tags:
       - User-Section
-securityDefinitions:
-  ApiKeyAuth:
-    in: header
-    name: Authorization
-    type: apiKey
-  BearerAuth:
-    in: header
-    name: authorization
-    type: apiKey
+  /wallet_balance/{id}:
+    get:
+      operationId: Find wallet by user id
+      parameters:
+      - description: Find wallet by user id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Response'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Wallet Balance By user id
+      tags:
+      - Payment-service
 swagger: "2.0"

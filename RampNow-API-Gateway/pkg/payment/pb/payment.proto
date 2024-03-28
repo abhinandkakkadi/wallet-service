@@ -1,13 +1,12 @@
 syntax = "proto3";
-package order;
+package payment;
 
-option go_package = "./pkg/order_svc/pb";
+option go_package = "./pkg/payment/pb";
 
 service PaymentService {
     rpc CreateTransaction(CreateTransactionRequest) returns (CreateTransactionResponse) {}
     rpc GetTransactions(GetTransactionRequest) returns (GetTransactionResponse) {}
     rpc GetWalletBalance(GetWalletBalanceRequest) returns (GetWalletBalanceResponse) {}
-    
   }
   
   message GetWalletBalanceRequest {

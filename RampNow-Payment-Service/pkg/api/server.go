@@ -24,7 +24,7 @@ func NewGRPCServer(paymentService *services.PaymentService, grpcPort string) *gr
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterOrderServiceServer(grpcServer, paymentService)
+	pb.RegisterPaymentServiceServer(grpcServer, paymentService)
 	// pb.RegisterOrderServiceServer(grpcServer, orderService)
 
 	if err := grpcServer.Serve(lis); err != nil {

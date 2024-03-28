@@ -12,8 +12,8 @@ const docTemplate = `{
         "title": "{{.Title}}",
         "contact": {
             "name": "API Support",
-            "url": "sethukumarj.com",
-            "email": "sethukumarj.76@gmail.com"
+            "url": "abhinandkakkadi.com",
+            "email": "abhinandkr06@gmil.com"
         },
         "license": {
             "name": "MIT",
@@ -141,122 +141,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/order": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Order-service"
-                ],
-                "summary": "Fetch Order",
-                "operationId": "Fetchorder",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Status : ",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Min Total : ",
-                        "name": "mintotal",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Max Total : ",
-                        "name": "maxtolat",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Sort By : ",
-                        "name": "sortby",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Sort Order : ",
-                        "name": "sortorder",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Page : ",
-                        "name": "page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Pagesize : ",
-                        "name": "pagesize",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Order-service"
-                ],
-                "summary": "Update Order",
-                "operationId": "Updateorder",
-                "parameters": [
-                    {
-                        "description": "Update Order Detials",
-                        "name": "updateorderdetials",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/domain.UpdateOrder"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    }
-                }
-            },
+        "/payment": {
             "post": {
                 "security": [
                     {
@@ -267,18 +152,18 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Order-service"
+                    "Payment-service"
                 ],
-                "summary": "Create Order",
-                "operationId": "createorder",
+                "summary": "Create Transaction",
+                "operationId": "createtransaction",
                 "parameters": [
                     {
-                        "description": "Order Detials",
-                        "name": "orderdetials",
+                        "description": "Transaction Detials",
+                        "name": "transactiondetials",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Order"
+                            "$ref": "#/definitions/domain.Transaction"
                         }
                     }
                 ],
@@ -298,42 +183,38 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/delete/{id}": {
-            "delete": {
+        "/transactions": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "User-Section"
+                    "Payment-service"
                 ],
-                "summary": "Delete user",
-                "operationId": "Delete user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id of the user to be deleted",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "Get Transactions",
+                "operationId": "Get Transactions",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pb.DeleteUserResponse"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/pb.DeleteUserResponse"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "502": {
                         "description": "Bad Gateway",
                         "schema": {
-                            "$ref": "#/definitions/pb.DeleteUserResponse"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -411,68 +292,66 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/wallet_balance/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payment-service"
+                ],
+                "summary": "Get Wallet Balance By user id",
+                "operationId": "Find wallet by user id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Find wallet by user id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "domain.Item": {
+        "domain.Transaction": {
             "type": "object",
             "properties": {
-                "description": {
+                "payee_ramp_id": {
                     "type": "string"
                 },
-                "id": {
+                "payer_ramp_id": {
                     "type": "string"
                 },
-                "price": {
+                "payment_amount": {
                     "type": "number"
-                },
-                "quantity": {
-                    "type": "integer"
-                }
-            }
-        },
-        "domain.Order": {
-            "type": "object",
-            "properties": {
-                "currency_unit": {
-                    "type": "string"
-                },
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domain.Item"
-                    }
-                },
-                "status": {
-                    "type": "string"
-                },
-                "total": {
-                    "type": "number"
-                }
-            }
-        },
-        "domain.UpdateOrder": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "pb.DeleteUserResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "integer"
                 }
             }
         },
@@ -482,13 +361,13 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "first_name": {
+                "full_name": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "last_name": {
+                "ramp_id": {
                     "type": "string"
                 },
                 "user_name": {
@@ -578,16 +457,13 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "first_name": {
+                "full_name": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "last_name": {
-                    "type": "string"
-                },
-                "user_name": {
+                "ramp_id": {
                     "type": "string"
                 }
             }
@@ -622,31 +498,16 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "first_name": {
-                    "type": "string"
-                },
-                "last_name": {
+                "full_name": {
                     "type": "string"
                 },
                 "password": {
                     "type": "string"
                 },
-                "user_name": {
+                "ramp_id": {
                     "type": "string"
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
-        },
-        "BearerAuth": {
-            "type": "apiKey",
-            "name": "authorization",
-            "in": "header"
         }
     }
 }`
@@ -654,11 +515,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:3005",
-	BasePath:         "/",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Order Management API",
-	Description:      "This is order management sample service. You can visit the GitHub repository at https://github.com/SethukumarJ/sellerapp-Gateway",
+	Title:            "RampNow API",
+	Description:      "This is RampNow API gateway for a wallet system. You can visit the GitHub repository at https://github.com/abhinandkakkadi/wallet-service",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

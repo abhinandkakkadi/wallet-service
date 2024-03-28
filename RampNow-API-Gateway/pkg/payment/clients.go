@@ -9,10 +9,10 @@ import (
 )
 
 type ServiceClient struct {
-	Client pb.OrderServiceClient
+	Client pb.PaymentServiceClient
 }
 
-func InitServiceClient(c *config.Config) pb.OrderServiceClient {
+func InitServiceClient(c *config.Config) pb.PaymentServiceClient {
 	// using WithInsecure() because no SSL running
 	cc, err := grpc.Dial(c.OrderSvcUrl, grpc.WithInsecure())
 
@@ -20,5 +20,5 @@ func InitServiceClient(c *config.Config) pb.OrderServiceClient {
 		fmt.Println("Could not connect:", err)
 	}
 
-	return pb.NewOrderServiceClient(cc)
+	return pb.NewPaymentServiceClient(cc)
 }

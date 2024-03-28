@@ -11,15 +11,15 @@ import (
 )
 
 // @Summary Create Transaction
-// @ID createorder
-// @Tags Order-service
+// @ID createtransaction
+// @Tags Payment-service
 // @Produce json
 // @Security BearerAuth
 // @Param transactiondetials body domain.Transaction{} true "Transaction Detials"
 // @Success 200 {object} response.Response{}
 // @Failure 422 {object} response.Response{}
 // @Router /payment [post]
-func CreateTransaction(ctx *gin.Context, c pb.OrderServiceClient) {
+func CreateTransaction(ctx *gin.Context, c pb.PaymentServiceClient) {
 	body := domain.Transaction{}
 	
 

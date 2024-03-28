@@ -5,19 +5,20 @@ import (
 	"net/http"
 
 	"github.com/abhinandkakkadi/rampnow/pkg/payment/pb"
+	"github.com/abhinandkakkadi/rampnow/pkg/utils/response"
 	"github.com/gin-gonic/gin"
 )
 
 // @Summary Get Transactions
 // @ID Get Transactions
-// @Tags Payment-Service
+// @Tags Payment-service
 // @Produce json
 // @Security BearerAuth
-// @Success 200 {object} pb.GetTransactionResponse{}
-// @Failure 422 {object} pb.GetTransactionResponse{}
-// @Failure 502 {object} pb.GetTransactionResponse{}
+// @Success 200 {object} response.Response{}
+// @Failure 422 {object} response.Response{}
+// @Failure 502 {object} response.Response{}
 // @Router /transactions [get]
-func GetAllTransactions(ctx *gin.Context, c pb.OrderServiceClient) {
+func GetAllTransactions(ctx *gin.Context, c pb.PaymentServiceClient) {
 	
 	res, err := c.GetTransactions(context.Background(), &pb.GetTransactionRequest{})
 
@@ -26,5 +27,8 @@ func GetAllTransactions(ctx *gin.Context, c pb.OrderServiceClient) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, &res)
+	resp := response.SuccessResponse(true, "SUCCESS", res)
+	ctx.Writer.Header().Set("Content-Type", "application/json")
+	ctx.Writer.WriteHeader(http.StatusOK)
+	response.ResponseJSON(*ctx, resp)
 }
