@@ -18,11 +18,11 @@ var envs = []string{
 
 func LoadConfig() (Config, error) {
 	config :=  Config{
-		DBHost: "localhost",
+		DBHost: "postgres",
 		DBName: "rampnowdb",
 		DBUser: "postgres",
 		DBPort: "5432",
-		DBPassword: "132457689",
+		DBPassword: "postgres",
 	}
 
 	fmt.Println("config: ", config)
