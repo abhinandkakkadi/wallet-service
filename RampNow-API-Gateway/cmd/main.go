@@ -17,13 +17,6 @@ import (
 // @version 1.0
 // @description This is RampNow API gateway for a wallet system. You can visit the GitHub repository at https://github.com/abhinandkakkadi/wallet-service
 
-// @contact.name API Support
-// @contact.url abhinandkakkadi.com
-// @contact.email abhinandkr06@gmil.com
-
-// @license.name MIT
-// @license.url https://opensource.org/licenses/MIT
-
 // @SecurityDefinition.Bearer BearerAuth
 // @TokenUrl /auth/token
 // @securityDefinitions.Bearer		type apiKey
