@@ -2,7 +2,6 @@ package routes
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -20,19 +19,19 @@ import (
 // @Router /auth/token-refresh [post]
 func TokenRefresh(ctx *gin.Context, c pb.AuthServiceClient) {
 
+	// Get access token
 	autheader := ctx.Request.Header["Authorization"]
 	auth := strings.Join(autheader, " ")
 	bearerToken := strings.Split(auth, " ")
-	fmt.Printf("\n\ntocen : %v\n\n", autheader)
 	token := bearerToken[1]
 
-	fmt.Println("Token refrsh called ", token)
+	// Check if token is empty
 	if token == "" {
-		fmt.Println("Token refrsh called err", token)
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
+	// Generate Refresh token
 	res, err := c.TokenRefresh(context.Background(), &pb.TokenRefreshRequest{
 		Token: token,
 	})
@@ -40,7 +39,8 @@ func TokenRefresh(ctx *gin.Context, c pb.AuthServiceClient) {
 		ctx.AbortWithStatusJSON(int(res.Status), res.Error)
 		return
 	}
+
+	// Set access token
 	ctx.Writer.Header().Set("accesstoken", res.Token)
 	ctx.JSON(int(res.Status), &res)
-
 }

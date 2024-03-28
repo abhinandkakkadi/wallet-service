@@ -22,15 +22,16 @@ import (
 // @Router /user/finduser/{id} [get]
 func FindUser(ctx *gin.Context, c pb.AuthServiceClient) {
 	paramsID := ctx.Param("id")
+
 	id, err := strconv.Atoi(paramsID)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnprocessableEntity, pb.FindUserResponse{Error: fmt.Sprint(errors.New("id not found"))})
 		return
 	}
+
 	res, err := c.FindUser(context.Background(), &pb.FindUserRequest{
 		Id: int64(id),
 	})
-
 	if err != nil {
 		ctx.AbortWithStatusJSON(int(res.Status), pb.FindUserResponse{Error: fmt.Sprint(res.Error)})
 		return

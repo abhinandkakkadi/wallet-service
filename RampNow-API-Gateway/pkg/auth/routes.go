@@ -35,13 +35,17 @@ func (svc *ServiceClient) Login(ctx *gin.Context) {
 	routes.Login(ctx, svc.Client)
 }
 
-
+// Get User details
 func (svc *ServiceClient) GetUsers(ctx *gin.Context) {
 	routes.GetUsers(ctx, svc.Client)
 }
+
+// Get a particular user
 func (svc *ServiceClient) FindUser(ctx *gin.Context) {
 	routes.FindUser(ctx, svc.Client)
 }
+
+// Refresh Token
 func (svc *ServiceClient) TokenRefresh(ctx *gin.Context) {
 	routes.TokenRefresh(ctx, svc.Client)
 }

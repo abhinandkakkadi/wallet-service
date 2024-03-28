@@ -2,7 +2,6 @@ package routes
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/abhinandkakkadi/rampnow/pkg/auth/pb"
@@ -35,13 +34,11 @@ func Login(ctx *gin.Context, c pb.AuthServiceClient) {
 		Email:    b.Email,
 		Password: b.Password,
 	})
-
-	fmt.Println("res", res)
-	fmt.Println("err", err)
 	if err != nil {
 		ctx.AbortWithStatusJSON(int(res.Status), res.Error)
 		return
 	}
+	
 	ctx.Writer.Header().Set("accesstoken", res.AccessToken)
 	ctx.JSON(http.StatusCreated, &res)
 }

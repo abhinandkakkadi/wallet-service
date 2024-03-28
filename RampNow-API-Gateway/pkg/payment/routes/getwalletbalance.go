@@ -44,5 +44,4 @@ func GetWalletBalance(ctx *gin.Context, c pb.PaymentServiceClient) {
 	ctx.Writer.Header().Set("Content-Type", "application/json")
 	ctx.Writer.WriteHeader(http.StatusOK)
 	response.ResponseJSON(*ctx, resp)
-
 }

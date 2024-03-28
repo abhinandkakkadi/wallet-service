@@ -17,9 +17,7 @@ import (
 // @Failure 502 {object} pb.GetUsersResponse{}
 // @Router /user/getusers [get]
 func GetUsers(ctx *gin.Context, c pb.AuthServiceClient) {
-
 	res, err := c.GetUsers(context.Background(), &pb.GetUsersRequest{})
-
 	if err != nil {
 		ctx.AbortWithStatusJSON(int(res.Status), res.Error)
 		return

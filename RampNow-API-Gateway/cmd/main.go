@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/abhinandkakkadi/rampnow/pkg/auth"
@@ -24,16 +23,18 @@ import (
 // @securityDefinitions.Bearer		in header
 // @securityDefinitions.BasicAuth	type basic
 func main() {
+	// Load configuration
 	c, err := config.LoadConfig()
-
 	if err != nil {
 		log.Fatalln("Failed at config", err)
 	}
 
+	// Start router
 	r := gin.Default()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// Register authentication and payment routes
 	authSvc := *auth.RegisterRoutes(r, &c)
-	fmt.Println("authSvc", authSvc)
 	payment.RegisterRoutes(r, &c, &authSvc)
 
 	r.Run(c.Port)

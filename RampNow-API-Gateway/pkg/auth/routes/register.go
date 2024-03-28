@@ -40,9 +40,6 @@ func Register(ctx *gin.Context, c pb.AuthServiceClient) {
 		FullName:  body.FullName,
 		RampId:    body.RampId,
 	})
-
-	fmt.Println("res", body)
-
 	if err != nil {
 		fmt.Println("er////r", err)
 		ctx.AbortWithStatusJSON(int(res.Status), res.Error)
