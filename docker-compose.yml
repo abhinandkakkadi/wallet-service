@@ -16,7 +16,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - 3001:50056
+      - 50056:50056
   paymentsvc:
     container_name: rampnow-payment-svc
     image: rampnow-payment-svc
@@ -25,7 +25,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - 3002:50057
+      - 50057:50057
   postgres:
     container_name: postgres
     image: postgres
