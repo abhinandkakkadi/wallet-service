@@ -1,0 +1,420 @@
+basePath: /
+definitions:
+  domain.Item:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+    type: object
+  domain.Order:
+    properties:
+      currency_unit:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/domain.Item'
+        type: array
+      status:
+        type: string
+      total:
+        type: number
+    type: object
+  domain.UpdateOrder:
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+    type: object
+  pb.DeleteUserResponse:
+    properties:
+      error:
+        type: string
+      id:
+        type: integer
+      status:
+        type: integer
+    type: object
+  pb.FindUser:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      user_name:
+        type: string
+    type: object
+  pb.FindUserResponse:
+    properties:
+      data:
+        $ref: '#/definitions/pb.FindUser'
+      error:
+        type: string
+      status:
+        type: integer
+    type: object
+  pb.GetUsersResponse:
+    properties:
+      error:
+        type: string
+      status:
+        type: integer
+      user:
+        items:
+          $ref: '#/definitions/pb.User'
+        type: array
+    type: object
+  pb.LoginResponse:
+    properties:
+      access_token:
+        type: string
+      error:
+        type: string
+      refressh_token:
+        type: string
+      status:
+        type: integer
+    type: object
+  pb.RegisterResponse:
+    properties:
+      error:
+        type: string
+      id:
+        type: integer
+      status:
+        type: integer
+    type: object
+  pb.TokenRefreshResponse:
+    properties:
+      error:
+        type: string
+      status:
+        type: integer
+      token:
+        type: string
+    type: object
+  pb.User:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      user_name:
+        type: string
+    type: object
+  response.Response:
+    properties:
+      data: {}
+      errors: {}
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  routes.LoginRequestBody:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  routes.RegisterRequestBody:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      user_name:
+        type: string
+    type: object
+host: localhost:3005
+info:
+  contact:
+    email: sethukumarj.76@gmail.com
+    name: API Support
+    url: sethukumarj.com
+  description: This is order management sample service. You can visit the GitHub repository
+    at https://github.com/SethukumarJ/sellerapp-Gateway
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Order Management API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      operationId: User Login
+      parameters:
+      - description: User Login
+        in: body
+        name: LoginUser
+        required: true
+        schema:
+          $ref: '#/definitions/routes.LoginRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.LoginResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/pb.LoginResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/pb.LoginResponse'
+      summary: Login user
+      tags:
+      - Authentication-Service
+  /auth/register:
+    post:
+      operationId: User Registration
+      parameters:
+      - description: User registration
+        in: body
+        name: RegisterUser
+        required: true
+        schema:
+          $ref: '#/definitions/routes.RegisterRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.RegisterResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/pb.RegisterResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/pb.RegisterResponse'
+      summary: Register new user
+      tags:
+      - Authentication-Service
+  /auth/token-refresh:
+    post:
+      operationId: User RefreshToken
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.TokenRefreshResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/pb.TokenRefreshResponse'
+      security:
+      - BearerAuth: []
+      summary: Refresh token for users
+      tags:
+      - Authentication-Service
+  /order:
+    get:
+      operationId: Fetchorder
+      parameters:
+      - description: 'Status : '
+        in: query
+        name: status
+        type: string
+      - description: 'Min Total : '
+        in: query
+        name: mintotal
+        type: string
+      - description: 'Max Total : '
+        in: query
+        name: maxtolat
+        type: string
+      - description: 'Sort By : '
+        in: query
+        name: sortby
+        type: string
+      - description: 'Sort Order : '
+        in: query
+        name: sortorder
+        type: string
+      - description: 'Page : '
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 'Pagesize : '
+        in: query
+        name: pagesize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Fetch Order
+      tags:
+      - Order-service
+    post:
+      operationId: createorder
+      parameters:
+      - description: Order Detials
+        in: body
+        name: orderdetials
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Order'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Order
+      tags:
+      - Order-service
+    put:
+      operationId: Updateorder
+      parameters:
+      - description: Update Order Detials
+        in: body
+        name: updateorderdetials
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdateOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Order
+      tags:
+      - Order-service
+  /user/delete/{id}:
+    delete:
+      operationId: Delete user
+      parameters:
+      - description: Id of the user to be deleted
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.DeleteUserResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/pb.DeleteUserResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/pb.DeleteUserResponse'
+      summary: Delete user
+      tags:
+      - User-Section
+  /user/finduser/{id}:
+    get:
+      operationId: Find user by id
+      parameters:
+      - description: Find user by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.FindUserResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/pb.FindUserResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/pb.FindUserResponse'
+      summary: Find user by id
+      tags:
+      - User-Section
+  /user/getusers:
+    get:
+      operationId: Get users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.GetUsersResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/pb.GetUsersResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/pb.GetUsersResponse'
+      summary: Get users
+      tags:
+      - User-Section
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BearerAuth:
+    in: header
+    name: authorization
+    type: apiKey
+swagger: "2.0"
