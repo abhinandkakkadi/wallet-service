@@ -27,19 +27,13 @@ services:
     ports:
       - 50057:50057
   postgres:
-    container_name: postgres
-    image: postgres
-    restart: always
-    user: postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "132457689"
+      POSTGRES_DB: rampnowdb
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./postgres:/docker-entrypoint-initdb.d
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=rampnowdb
-    ports:
-      - 5433:5432
 
 volumes:
   db-data:
