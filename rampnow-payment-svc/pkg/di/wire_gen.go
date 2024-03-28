@@ -17,14 +17,14 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeAPI(cfg config.Config) (*http.ServerHTTP, error) {
+func InitializeAPI(cfg config.Config) (error) {
 	gormDB, err := db.ConnectDatabase(cfg)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	paymentRepository := repository.NewPaymentRepository(gormDB)
 	paymentUseCase := usecase.NewPaymentUseCase(paymentRepository)
 	paymentService := services.NewPaymentService(paymentUseCase)
-	serverHTTP := http.NewServerHTTP(paymentService)
-	return serverHTTP, nil
+	http.NewServerHTTP(paymentService)
+	return  nil
 }

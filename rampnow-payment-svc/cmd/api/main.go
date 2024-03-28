@@ -15,12 +15,9 @@ func main() {
 	}
 	fmt.Println("config : ", config)
 
-	server, diErr := di.InitializeAPI(config)
+  diErr := di.InitializeAPI(config)
 	if diErr != nil {
 		log.Fatal("cannot start server: ", diErr)
-	} else {
-		server.Start()
-
 	}
 
 }

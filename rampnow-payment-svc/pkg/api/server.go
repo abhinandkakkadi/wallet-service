@@ -33,13 +33,10 @@ func NewGRPCServer(paymentService *services.PaymentService, grpcPort string) *gr
 	return grpcServer
 }
 
-func NewServerHTTP(paymentService *services.PaymentService) *ServerHTTP {
-	engine := gin.New()
-	go NewGRPCServer(paymentService, "50057")
-	// Use logger from Gin
-	engine.Use(gin.Logger())
+func NewServerHTTP(paymentService *services.PaymentService) {
 
-	return &ServerHTTP{engine: engine}
+	NewGRPCServer(paymentService, "50057")
+
 }
 
 func (sh *ServerHTTP) Start() {

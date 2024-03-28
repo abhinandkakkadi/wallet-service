@@ -11,6 +11,6 @@ RUN go mod download
 
 COPY . .
 
-EXPOSE 3002
+EXPOSE 3001
 
-CMD [ "go","run","cmd/main.go" ]
+CMD [ "go","run","cmd/api/main.go" ]

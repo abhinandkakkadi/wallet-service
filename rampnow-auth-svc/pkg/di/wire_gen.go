@@ -17,15 +17,15 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeAPI(cfg config.Config) (*http.ServerHTTP, error) {
+func InitializeAPI(cfg config.Config) (error) {
 	gormDB, err := db.ConnectDatabase(cfg)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	userRepository := repository.NewUserRepository(gormDB)
 	userUseCase := usecase.NewUserUseCase(userRepository)
 	jwtUsecase := usecase.NewJWTUsecase()
 	userHandler := handler.NewUserHandler(userUseCase, jwtUsecase)
-	serverHTTP := http.NewServerHTTP(userHandler)
-	return serverHTTP, nil
+	http.NewServerHTTP(userHandler)
+	return nil
 }

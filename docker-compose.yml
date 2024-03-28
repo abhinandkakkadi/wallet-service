@@ -1,40 +1,31 @@
 services:
   apigateway:
-    container_name: go-grpc-api-gateway
-    image: go-grpc-api-gateway
+    container_name: rampnow-api-gateway
+    image: rampnow-api-gateway
     build:
-      context: ./go-grpc-api-gateway
+      context: ./rampnow-api-gateway
     depends_on:
       - postgres
     ports:
-      - 3000:3000
+      - 3005:3005
   authsvc:
-    container_name: go-grpc-auth-svc
-    image: go-grpc-auth-svc
+    container_name: rampnow-auth-svc
+    image: rampnow-auth-svc
     build:
-      context: ./go-grpc-auth-svc
+      context: ./rampnow-auth-svc
     depends_on:
       - postgres
     ports:
-      - 3001:3001
-  ordersvc:
-    container_name: go-grpc-order-svc
-    image: go-grpc-order-svc
+      - 3001:50056
+  paymentsvc:
+    container_name: rampnow-payment-svc
+    image: rampnow-payment-svc
     build:
-      context: ./go-grpc-order-svc
+      context: ./rampnow-payment-svc
     depends_on:
       - postgres
     ports:
-      - 3002:3002
-  productsvc:
-    container_name: go-grpc-product-svc
-    image: go-grpc-product-svc
-    build:
-      context: ./go-grpc-product-svc
-    depends_on:
-      - postgres
-    ports:
-      - 3003:3003
+      - 3002:50057
   postgres:
     container_name: postgres
     image: postgres
@@ -44,19 +35,11 @@ services:
       - db-data:/var/lib/postgresql/data
       - ./postgres:/docker-entrypoint-initdb.d
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_MULTIPLE_DATABASES=order_svc,product_svc,auth_svc
+      - POSTGRES_DB=rampnowdb
     ports:
       - 5433:5432
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: always
-    depends_on:
-      - postgres
-    ports:
-      - 8080:8080
 
 volumes:
   db-data:
