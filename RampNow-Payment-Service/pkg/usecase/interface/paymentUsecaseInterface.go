@@ -7,7 +7,7 @@ import (
 	utils "github.com/abhinandkakkadi/rampnow-payment-svc/pkg/utils"
 )
 
-type OrderUseCase interface {
+type PaymentUseCase interface {
 	CreateOrder(ctx context.Context, order domain.ReqOrder) (string, error)
 	GetUserWalletById(ctx context.Context, userid int) (domain.UserWallet, error)
 	CreateTransaction(ctx context.Context, transaction domain.Transaction) (domain.Transaction, error)

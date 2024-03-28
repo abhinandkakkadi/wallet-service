@@ -14,16 +14,16 @@ import (
 	"github.com/google/uuid"
 )
 
-type orderUseCase struct {
-	orderRepo repository.OrderRepository
+type paymentUseCase struct {
+	orderRepo repository.PaymentRepository
 }
 
-func (o *orderUseCase) GetAllTransactions(ctx context.Context) ([]domain.Transaction, error) {
+func (o *paymentUseCase) GetAllTransactions(ctx context.Context) ([]domain.Transaction, error) {
 	transactions, err := o.orderRepo.GetAllTransactions(ctx)
 	return transactions, err
 }
 
-func (o *orderUseCase) GetUserWalletById(ctx context.Context, userid int) (domain.UserWallet, error) {
+func (o *paymentUseCase) GetUserWalletById(ctx context.Context, userid int) (domain.UserWallet, error) {
 	// Get name and ramp id 
 	user, err := o.orderRepo.FindByID(ctx, userid)
 	if err != nil {
@@ -46,7 +46,7 @@ func (o *orderUseCase) GetUserWalletById(ctx context.Context, userid int) (domai
 	return userWallet, nil
 }
 
-func (o *orderUseCase) CreateTransaction(ctx context.Context, transaction domain.Transaction) (domain.Transaction, error) {
+func (o *paymentUseCase) CreateTransaction(ctx context.Context, transaction domain.Transaction) (domain.Transaction, error) {
 
 	transaction.PaymentStatus = "PAID"
 	transaction.PaymentDate = time.Now()
@@ -119,7 +119,7 @@ func (o *orderUseCase) CreateTransaction(ctx context.Context, transaction domain
 	return transaction, err
 }
 
-func (o *orderUseCase) FetchOrder(ctx context.Context, userid int, filter domain.Filter, pagenation utils.Filter) ([]domain.ReqOrder, utils.Metadata, error) {
+func (o *paymentUseCase) FetchOrder(ctx context.Context, userid int, filter domain.Filter, pagenation utils.Filter) ([]domain.ReqOrder, utils.Metadata, error) {
 	order, metadata, err := o.orderRepo.FetchOrder(ctx, userid, filter, pagenation)
 	if err != nil {
 		return []domain.ReqOrder{}, metadata, err
@@ -152,13 +152,13 @@ func (o *orderUseCase) FetchOrder(ctx context.Context, userid int, filter domain
 }
 
 // UpdateOrder implements interfaces.OrderUseCase
-func (o *orderUseCase) UpdateOrder(ctx context.Context, orderid string, status string) (string, error) {
+func (o *paymentUseCase) UpdateOrder(ctx context.Context, orderid string, status string) (string, error) {
 	id, err := o.orderRepo.UpdateOrder(ctx, orderid, status)
 	return id, err
 }
 
 // CreateOrder implements interfaces.OrderUseCase
-func (o *orderUseCase) CreateOrder(ctx context.Context, order domain.ReqOrder) (string, error) {
+func (o *paymentUseCase) CreateOrder(ctx context.Context, order domain.ReqOrder) (string, error) {
 	items := order.Item
 	fmt.Println(len(items))
 	if len(items) == 0 {
@@ -191,8 +191,8 @@ func (o *orderUseCase) CreateOrder(ctx context.Context, order domain.ReqOrder) (
 	return id, err
 }
 
-func NewOrderUseCase(repo repository.OrderRepository) interfaces.OrderUseCase {
-	return &orderUseCase{
+func NewPaymentUseCase(repo repository.PaymentRepository) interfaces.PaymentUseCase {
+	return &paymentUseCase{
 		orderRepo: repo,
 	}
 }

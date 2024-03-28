@@ -5,21 +5,21 @@ import (
 	"net/http"
 
 	"github.com/abhinandkakkadi/rampnow/pkg/domain"
-	"github.com/abhinandkakkadi/rampnow/pkg/order_svc/pb"
+	"github.com/abhinandkakkadi/rampnow/pkg/payment/pb"
 	"github.com/abhinandkakkadi/rampnow/pkg/utils/response"
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary Create Order
+// @Summary Create Transaction
 // @ID createorder
 // @Tags Order-service
 // @Produce json
 // @Security BearerAuth
-// @Param orderdetials body domain.Order{} true "Order Detials"
+// @Param transactiondetials body domain.Transaction{} true "Transaction Detials"
 // @Success 200 {object} response.Response{}
 // @Failure 422 {object} response.Response{}
-// @Router /order [post]
-func CreateOrder(ctx *gin.Context, c pb.OrderServiceClient) {
+// @Router /payment [post]
+func CreateTransaction(ctx *gin.Context, c pb.OrderServiceClient) {
 	body := domain.Transaction{}
 	
 
@@ -48,6 +48,5 @@ func CreateOrder(ctx *gin.Context, c pb.OrderServiceClient) {
 	ctx.Writer.Header().Set("Content-Type", "application/json")
 	ctx.Writer.WriteHeader(http.StatusOK)
 	response.ResponseJSON(*ctx, responses)
-	return
 
 }

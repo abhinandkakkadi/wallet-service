@@ -6,20 +6,20 @@ import (
 
 	"github.com/abhinandkakkadi/rampnow/pkg/auth"
 	"github.com/abhinandkakkadi/rampnow/pkg/config"
-	order "github.com/abhinandkakkadi/rampnow/pkg/order_svc"
+	"github.com/abhinandkakkadi/rampnow/pkg/payment"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title Order Management API
+// @title RampNow API
 // @version 1.0
-// @description This is order management sample service. You can visit the GitHub repository at https://github.com/abhinandkakkadi/rampnow-Gateway
+// @description This is RampNow API gateway for a wallet system. You can visit the GitHub repository at https://github.com/abhinandkakkadi/wallet-service
 
 // @contact.name API Support
-// @contact.url sethukumarj.com
-// @contact.email sethukumarj.76@gmail.com
+// @contact.url abhinandkakkadi.com
+// @contact.email abhinandkr06@gmil.com
 
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
@@ -46,7 +46,7 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	authSvc := *auth.RegisterRoutes(r, &c)
 	fmt.Println("authSvc", authSvc)
-	order.RegisterRoutes(r, &c, &authSvc)
+	payment.RegisterRoutes(r, &c, &authSvc)
 
 	r.Run(c.Port)
 }

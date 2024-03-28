@@ -3,12 +3,10 @@ package order;
 
 option go_package = "./pkg/order_svc/pb";
 
-service OrderService {
+service PaymentService {
     rpc CreateTransaction(CreateTransactionRequest) returns (CreateTransactionResponse) {}
     rpc GetTransactions(GetTransactionRequest) returns (GetTransactionResponse) {}
     rpc GetWalletBalance(GetWalletBalanceRequest) returns (GetWalletBalanceResponse) {}
-    rpc UpdateOrder(UpdateOrderRequest) returns (UpdateOrderResponse) {}
-    rpc FetchOrder(FetchOrderRequest) returns (FetchOrderResponse) {}
     
   }
   
@@ -63,65 +61,4 @@ service OrderService {
     string Description =2 ;
     float Price = 3;
     int64 Quantity = 4;
-  }
-
-  // UpdateOrder
-
-message UpdateOrderRequest {
-  string userId =1 ;
-  string OrderId =2 ;
-  string Status =3;
-}
-
-message UpdateOrderResponse {
-  int32 status = 1;
-  string error = 2;
-  string id = 3;
-}
-
-
-
-// FetchOrder
-
-message FetchOrderRequest {
-  int64 userId  =1 ;
-  string Status = 2;
-  float MinTotal = 3;
-  float MaxTotal = 4;
-  string SortBy = 5;
-  string SortOrder = 6;
-  Filter Filter = 7;
-}
-
-
-
-
-
-message FetchOrderResponse {
-  int32 status = 1;
-  string error = 2;
-  repeated Order orders = 3;
-  Metadata Metadata =4;
-}
- 
-message Order {
-  string OrderId =2 ;
-  string Status =3 ;
-  repeated Item Item =4;
-  float Total =5 ;
-  string CurrencyUnit =6;
-}
-
-message Filter {
-  int64 Page = 1;
-  int64 PageSize = 2;
-}
-
-message Metadata {
-  int64 CurrentPage = 1;
-  int64 PageSize = 2;
-  int64 FirstPage = 3;
-  int64 LastPage = 4;
-  int64 TotalRecords = 5;
-}
-  
+  } 

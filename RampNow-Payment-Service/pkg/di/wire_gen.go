@@ -22,9 +22,9 @@ func InitializeAPI(cfg config.Config) (*http.ServerHTTP, error) {
 	if err != nil {
 		return nil, err
 	}
-	orderRepository := repository.NewOrderRepository(gormDB)
-	orderUseCase := usecase.NewOrderUseCase(orderRepository)
-	orderService := services.NewOrderService(orderUseCase)
-	serverHTTP := http.NewServerHTTP(orderService)
+	paymentRepository := repository.NewPaymentRepository(gormDB)
+	paymentUseCase := usecase.NewPaymentUseCase(paymentRepository)
+	paymentService := services.NewPaymentService(paymentUseCase)
+	serverHTTP := http.NewServerHTTP(paymentService)
 	return serverHTTP, nil
 }

@@ -7,7 +7,7 @@ import (
 	utils "github.com/abhinandkakkadi/rampnow-payment-svc/pkg/utils"
 )
 
-type OrderRepository interface {
+type PaymentRepository interface {
 	CreateOrder(ctx context.Context, order domain.Order) (string, error)
 	FindByID(ctx context.Context, userId int) (domain.Users, error)
 	GetAllTransactions(ctx context.Context) ([]domain.Transaction, error)

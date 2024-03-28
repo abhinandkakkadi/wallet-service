@@ -2,7 +2,7 @@
 
 ## Project Structure (API GATEWAY PATTERN)
 
-This project includes authenction service and order service accompanied with api gateway.
+This project includes authetication service and order service accompanied with api gateway.
 
 # `API-GATEWAY`
 

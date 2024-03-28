@@ -15,7 +15,7 @@ type ServerHTTP struct {
 	engine *gin.Engine
 }
 
-func NewGRPCServer(orderService *services.OrderService, grpcPort string) *grpc.Server {
+func NewGRPCServer(paymentService *services.PaymentService, grpcPort string) *grpc.Server {
 	lis, err := net.Listen("tcp", ":"+grpcPort)
 	fmt.Println("grpcPort/////", grpcPort)
 	if err != nil {
@@ -24,7 +24,7 @@ func NewGRPCServer(orderService *services.OrderService, grpcPort string) *grpc.S
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterOrderServiceServer(grpcServer, orderService)
+	pb.RegisterOrderServiceServer(grpcServer, paymentService)
 	// pb.RegisterOrderServiceServer(grpcServer, orderService)
 
 	if err := grpcServer.Serve(lis); err != nil {
@@ -33,9 +33,9 @@ func NewGRPCServer(orderService *services.OrderService, grpcPort string) *grpc.S
 	return grpcServer
 }
 
-func NewServerHTTP(orderService *services.OrderService) *ServerHTTP {
+func NewServerHTTP(paymentService *services.PaymentService) *ServerHTTP {
 	engine := gin.New()
-	go NewGRPCServer(orderService, "50057")
+	go NewGRPCServer(paymentService, "50057")
 	// Use logger from Gin
 	engine.Use(gin.Logger())
 

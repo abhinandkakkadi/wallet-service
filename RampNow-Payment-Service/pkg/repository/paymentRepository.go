@@ -12,11 +12,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type orderDatabase struct {
+type paymentDatabase struct {
 	DB *gorm.DB
 }
 
-func (o *orderDatabase) GetUserIdFromRampId(ctx context.Context, rampId string) (int, error) {
+func (o *paymentDatabase) GetUserIdFromRampId(ctx context.Context, rampId string) (int, error) {
 	var userID int 
 
 	err := o.DB.Raw("SELECT id FROM users WHERE ramp_id = ?", rampId).Scan(&userID).Error
@@ -27,7 +27,7 @@ func (o *orderDatabase) GetUserIdFromRampId(ctx context.Context, rampId string) 
 	return userID, nil
 }
 
-func (o *orderDatabase) GetWalletAmountFromUserId(ctx context.Context, userId int) (float64, error) {
+func (o *paymentDatabase) GetWalletAmountFromUserId(ctx context.Context, userId int) (float64, error) {
 	var walletAmount float64 
 
 	err := o.DB.Raw("SELECT wallet_balance FROM wallets WHERE  user_id = ?", userId).Scan(&walletAmount).Error
@@ -38,17 +38,17 @@ func (o *orderDatabase) GetWalletAmountFromUserId(ctx context.Context, userId in
 	return walletAmount, nil
 }
 
-func (o *orderDatabase) IncrementWalletBalance(ctx context.Context, userId int, paymentAmount float64) (error) {
+func (o *paymentDatabase) IncrementWalletBalance(ctx context.Context, userId int, paymentAmount float64) (error) {
 	err := o.DB.Exec("UPDATE wallets SET wallet_balance = wallet_balance + ? WHERE user_id = ?", paymentAmount, userId).Error
 	return err
 }
 
-func (o *orderDatabase) DecrementWalletBalance(ctx context.Context, userId int, paymentAmount float64) (error) {
+func (o *paymentDatabase) DecrementWalletBalance(ctx context.Context, userId int, paymentAmount float64) (error) {
 	err := o.DB.Exec("UPDATE wallets SET wallet_balance = wallet_balance - ? WHERE user_id = ?", paymentAmount, userId).Error
 	return err
 }
 
-func (o *orderDatabase) FindUser(ctx context.Context, rampId string) (int, error) {
+func (o *paymentDatabase) FindUser(ctx context.Context, rampId string) (int, error) {
 	var exists int
 
 	err := o.DB.Raw("SELECT COUNT(*) FROM users WHERE ramp_id = ?", rampId).Scan(&exists).Error
@@ -59,14 +59,14 @@ func (o *orderDatabase) FindUser(ctx context.Context, rampId string) (int, error
 	return exists, nil
 }
 
-func (o *orderDatabase) FindByID(ctx context.Context, userId int) (domain.Users, error) {
+func (o *paymentDatabase) FindByID(ctx context.Context, userId int) (domain.Users, error) {
 	var user domain.Users
 	err := o.DB.First(&user, userId).Error
 
 	return user, err
 }
 
-func (o *orderDatabase) GetAllTransactions(ctx context.Context) ([]domain.Transaction, error) {
+func (o *paymentDatabase) GetAllTransactions(ctx context.Context) ([]domain.Transaction, error) {
 	var transaction []domain.Transaction
 	err := o.DB.Find(&transaction).Error
 
@@ -75,13 +75,13 @@ func (o *orderDatabase) GetAllTransactions(ctx context.Context) ([]domain.Transa
 
 
 
-func (o *orderDatabase) CreateTransaction(ctx context.Context, transaction domain.Transaction) (domain.Transaction, error) {
+func (o *paymentDatabase) CreateTransaction(ctx context.Context, transaction domain.Transaction) (domain.Transaction, error) {
 	err := o.DB.Save(&transaction).Error
 	return transaction, err
 }
 
 // FetchOrder implements interfaces.OrderRepository
-func (o *orderDatabase) FetchOrder(ctx context.Context, userid int, filter domain.Filter, pagenation utils.Filter) ([]domain.Order, utils.Metadata, error) {
+func (o *paymentDatabase) FetchOrder(ctx context.Context, userid int, filter domain.Filter, pagenation utils.Filter) ([]domain.Order, utils.Metadata, error) {
 
 	sql := "SELECT * FROM orders WHERE 1=1"
 	if filter.Status != "" {
@@ -114,14 +114,14 @@ func (o *orderDatabase) FetchOrder(ctx context.Context, userid int, filter domai
 }
 
 // UpdateOrder implements interfaces.OrderRepository
-func (o *orderDatabase) UpdateOrder(ctx context.Context, orderid string, status string) (string, error) {
+func (o *paymentDatabase) UpdateOrder(ctx context.Context, orderid string, status string) (string, error) {
 	order := domain.Order{}
 	err := o.DB.Model(&order).Where("id = ?", orderid).Update("status", status).Error
 	return orderid, err
 }
 
 // FindItem implements interfaces.OrderRepository
-func (c *orderDatabase) FindItem(ctx context.Context, id string) (domain.Item, error) {
+func (c *paymentDatabase) FindItem(ctx context.Context, id string) (domain.Item, error) {
 
 	var item domain.Item
 	err := c.DB.Where("id = ?", id).First(&item).Error
@@ -133,18 +133,18 @@ func (c *orderDatabase) FindItem(ctx context.Context, id string) (domain.Item, e
 }
 
 // CreateItem implements interfaces.OrderRepository
-func (o *orderDatabase) CreateItem(ctx context.Context, item domain.Item) (string, error) {
+func (o *paymentDatabase) CreateItem(ctx context.Context, item domain.Item) (string, error) {
 	err := o.DB.Create(&item).Error
 	return item.ID, err
 }
 
 // CreateOrder implements interfaces.OrderRepository
-func (o *orderDatabase) CreateOrder(ctx context.Context, order domain.Order) (string, error) {
+func (o *paymentDatabase) CreateOrder(ctx context.Context, order domain.Order) (string, error) {
 	order.ID = uuid.New().String()
 	err := o.DB.Create(&order).Error
 	return order.ID, err
 }
 
-func NewOrderRepository(DB *gorm.DB) interfaces.OrderRepository {
-	return &orderDatabase{DB}
+func NewPaymentRepository(DB *gorm.DB) interfaces.PaymentRepository {
+	return &paymentDatabase{DB}
 }

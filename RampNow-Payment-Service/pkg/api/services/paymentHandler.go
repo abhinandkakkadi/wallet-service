@@ -12,11 +12,11 @@ import (
 	utils "github.com/abhinandkakkadi/rampnow-payment-svc/pkg/utils"
 )
 
-type OrderService struct {
-	orderUseCase usecase.OrderUseCase
+type PaymentService struct {
+	orderUseCase usecase.PaymentUseCase
 }
 
-func (c *OrderService) GetWalletBalance(ctx context.Context, req *pb.GetWalletBalanceRequest) (*pb.GetWalletBalanceResponse, error) {
+func (c *PaymentService) GetWalletBalance(ctx context.Context, req *pb.GetWalletBalanceRequest) (*pb.GetWalletBalanceResponse, error) {
 	// Get 
 	if req.Id == 0 {
 		return &pb.GetWalletBalanceResponse{
@@ -49,7 +49,7 @@ func (c *OrderService) GetWalletBalance(ctx context.Context, req *pb.GetWalletBa
 
 } 
 
-func (c *OrderService) GetTransactions(ctx context.Context, req *pb.GetTransactionRequest) (*pb.GetTransactionResponse, error) {
+func (c *PaymentService) GetTransactions(ctx context.Context, req *pb.GetTransactionRequest) (*pb.GetTransactionResponse, error) {
 	transactions, err := c.orderUseCase.GetAllTransactions(ctx)
 	if err != nil {
 		return &pb.GetTransactionResponse{
@@ -77,7 +77,7 @@ func (c *OrderService) GetTransactions(ctx context.Context, req *pb.GetTransacti
 	}, nil
 }
 
-func (c *OrderService) CreateTransaction(ctx context.Context, req *pb.CreateTransactionRequest) (*pb.CreateTransactionResponse, error) {
+func (c *PaymentService) CreateTransaction(ctx context.Context, req *pb.CreateTransactionRequest) (*pb.CreateTransactionResponse, error) {
 	// Create transaction 
 	transaction := domain.Transaction{
 		PayerRampId: req.PayerRampId,
@@ -102,7 +102,7 @@ func (c *OrderService) CreateTransaction(ctx context.Context, req *pb.CreateTran
 
 
 // UpdateOrder implements pb.OrderServiceServer
-func (c *OrderService) UpdateOrder(ctx context.Context, req *pb.UpdateOrderRequest) (*pb.UpdateOrderResponse, error) {
+func (c *PaymentService) UpdateOrder(ctx context.Context, req *pb.UpdateOrderRequest) (*pb.UpdateOrderResponse, error) {
 	id, err := c.orderUseCase.UpdateOrder(ctx, req.OrderId, req.Status)
 	if err != nil {
 		return &pb.UpdateOrderResponse{
@@ -119,7 +119,7 @@ func (c *OrderService) UpdateOrder(ctx context.Context, req *pb.UpdateOrderReque
 }
 
 // FetchOrder implements pb.OrderServiceServer
-func (c *OrderService) FetchOrder(ctx context.Context, req *pb.FetchOrderRequest) (*pb.FetchOrderResponse, error) {
+func (c *PaymentService) FetchOrder(ctx context.Context, req *pb.FetchOrderRequest) (*pb.FetchOrderResponse, error) {
 	filter := domain.Filter{
 		Status:    req.Status,
 		MinTotal:  float64(req.MinTotal),
@@ -177,8 +177,8 @@ func (c *OrderService) FetchOrder(ctx context.Context, req *pb.FetchOrderRequest
 
 }
 
-func NewOrderService(usecase usecase.OrderUseCase) *OrderService {
-	return &OrderService{
+func NewPaymentService(usecase usecase.PaymentUseCase) *PaymentService {
+	return &PaymentService{
 		orderUseCase: usecase,
 	}
 }

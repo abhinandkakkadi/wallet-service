@@ -1,10 +1,10 @@
-package order
+package payment
 
 import (
 	"fmt"
 
 	"github.com/abhinandkakkadi/rampnow/pkg/config"
-	"github.com/abhinandkakkadi/rampnow/pkg/order_svc/pb"
+	"github.com/abhinandkakkadi/rampnow/pkg/payment/pb"
 	"google.golang.org/grpc"
 )
 
