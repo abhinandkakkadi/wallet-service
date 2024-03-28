@@ -1,13 +1,18 @@
-# ORDER_MICROSERVICE
+# PAYMENT MICROSERVICE
 
 ## Project Structure (API GATEWAY PATTERN)
 
-This project includes authetication service and order service accompanied with api gateway.
+This project includes authetication service and payment service accompanied with api gateway.
+
+### `To run`
+
+```bash
+docker-compose up --build -d
+```
 
 # `API-GATEWAY`
 
-The API gateway in our microservice project acts as a centralized entry point for accessing and managing the order service and auth service. It provides a unified interface for clients to interact with these services without needing to know their specific locations.
-(https://github.com/SethukumarJ/sellerapp_order_svc/tree/main/SellerApp-API-Gateway) - API Gateway (HTTP)
+The API gateway in my microservice project acts as a centralized entry point for accessing and managing the order service and auth service. It provides a unified interface for clients to interact with these services without needing to know their specific locations.
 
 ### `To run`
 
@@ -51,7 +56,7 @@ I have used Postgres database for auth service.
 
 ```bash
 # Navigate into the project
-cd ./RampNow-Order-Service
+cd ./RampNow-Payment-Service
 
 make deps # Install the dependencies
 make run  # Run the project
