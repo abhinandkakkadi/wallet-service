@@ -1,9 +1,5 @@
 package config
 
-import (
-	"fmt"
-)
-
 type Config struct {
 	DBHost     string `mapstructure:"DB_HOST"`
 	DBName     string `mapstructure:"DB_NAME"`
@@ -17,6 +13,7 @@ var envs = []string{
 }
 
 func LoadConfig() (Config, error) {
+	// TODO: add config in .env
 	config :=  Config{
 		DBHost: "postgres",
 		DBName: "rampnowdb",
@@ -24,26 +21,6 @@ func LoadConfig() (Config, error) {
 		DBPort: "5432",
 		DBPassword: "postgres",
 	}
-
-	fmt.Println("config: ", config)
-
-	// viper.AddConfigPath("./")
-	// viper.SetConfigFile(".env")
-	// viper.ReadInConfig()
-
-	// for _, env := range envs {
-	// 	if err := viper.BindEnv(env); err != nil {
-	// 		return config, err
-	// 	}
-	// }
-
-	// if err := viper.Unmarshal(&config); err != nil {
-	// 	return config, err
-	// }
-
-	// if err := validator.New().Struct(&config); err != nil {
-	// 	return config, err
-	// }
 
 	return config, nil
 }

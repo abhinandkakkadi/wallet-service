@@ -13,6 +13,8 @@ var envs = []string{
 }
 
 func LoadConfig() (Config, error) {
+
+	// TODO: read from .env variable
 	config :=  Config{
 		DBHost: "postgres",
 		DBName: "rampnowdb",
@@ -21,24 +23,5 @@ func LoadConfig() (Config, error) {
 		DBPassword: "postgres",
 	}
 	
-
-	// viper.AddConfigPath("./")
-	// viper.SetConfigFile(".env")
-	// viper.ReadInConfig()
-
-	// for _, env := range envs {
-	// 	if err := viper.BindEnv(env); err != nil {
-	// 		return config, err
-	// 	}
-	// }
-
-	// if err := viper.Unmarshal(&config); err != nil {
-	// 	return config, err
-	// }
-
-	// if err := validator.New().Struct(&config); err != nil {
-	// 	return config, err
-	// }
-
 	return config, nil
 }
